@@ -18,6 +18,13 @@ import numpy as np
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.backends.mps.is_available():
+    device = "mps"
+else:
+    device = "cpu"
+
 from sae_training.config import LanguageModelSAERunnerConfig
 from sae_training.utils import LMSparseAutoencoderSessionloader
 from sae_training.train_sae_on_language_model import train_sae_on_language_model
@@ -82,11 +89,14 @@ cfg = LanguageModelSAERunnerConfig(
     dead_feature_threshold = 1e-8,
 
     # WANDB
-    log_to_wandb = False,
+    log_to_wandb = True,
+    wandb_entity="nishantaswani",
+    wandb_project="koopman_ae",
+    wandb_log_frequency=30,
     
     # Misc
     use_tqdm = True,
-    device = "cuda",
+    device = device,
     seed = 42,
     n_checkpoints = 3,
     checkpoint_path = "gpt2-small-transcoders", # change as you please

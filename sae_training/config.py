@@ -182,6 +182,9 @@ class LanguageModelSAERunnerConfig(RunnerConfig):
             f"Number tokens in sparsity calculation window: {self.feature_sampling_window * self.train_batch_size:.2e}"
         )
 
+        if self.log_to_wandb: 
+            wandb.init(entity=self.wandb_entity, project=self.wandb_project)
+
 
 @dataclass
 class CacheActivationsRunnerConfig(RunnerConfig):
